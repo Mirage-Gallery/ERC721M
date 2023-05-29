@@ -69,10 +69,16 @@ You can reference an example of this implementation in the provided [exampleCont
 ### Steps to Sell an NFT using ERC721M:
 
 #### Immediate Auction Start:
-Use the ```startAuction(uint256 tokenId, uint256 duration)``` function. This function will initiate an auction that begins as soon as the transaction is confirmed.
+```solidity
+startAuction(uint256 tokenId, uint256 duration)
+```
+This function will initiate an auction that begins as soon as the transaction is confirmed.
 
 #### Auction Start on First Bid: 
-Alternatively, you can use the ```startAuctionOnBid(uint256 tokenId, uint256 duration)``` function. With this function, the auction will only start once the first bid has been placed.
+```solidity
+startAuctionOnBid(uint256 tokenId, uint256 duration)
+```
+With this function, the auction will only start once the first bid has been placed.
 
 The duration parameter for both functions is set in seconds. Please note that the ERC721M standard has a built-in minimum duration of 120 seconds, also known as a 'Rapid Auction'.
 
