@@ -21,7 +21,7 @@ This dual-approach aims to provide artists with the flexibility to choose a meth
 #### Rapid Auction Mechanism: 
 To make sales more dynamic and ensure that anyone can be outbid, ERC721M introduces a rapid auction mechanism. Once a sale is initiated, a short countdown begins, during which anyone can place a higher bid. The sale concludes when the countdown ends, with the highest bid securing the token. 
 
-The "Rapid Auction Mechanism" in ERC721M plays a critical role in preventing bad actors from exploiting the system by deploying their own 'marketplace' contracts to wrap the token transfer and Ethereum transfers in a single transaction. This mechanism also prevents manipulation attempts where a bad actor could try to coordinate with another party to "sell" the NFT at an artificially low price to minimize the royalty payout. Because the rapid auction system is open to any participant who can outbid the current highest bid, the chances of such collusion successfully avoiding an appropriate royalty fee are significantly diminished.
+The "Rapid Auction Mechanism" in ERC721M plays a critical role in preventing bad actors from exploiting the system by deploying their own 'marketplace' contracts to wrap the token transfer and Ether transfers in a single transaction. This mechanism also prevents manipulation attempts where a bad actor could try to coordinate with another party to "sell" the NFT at an artificially low price to minimize the royalty payout. Because the rapid auction system is open to any participant who can outbid the current highest bid, the chances of such collusion successfully avoiding an appropriate royalty fee are significantly diminished.
 
 ## Philosophy and Impact
 The introduction of ERC721M presents a philosophical pivot in the world of blockchain and decentralized systems. In designing this standard, we acknowledge a departure from the traditionally celebrated ethos of web3: absolute freedom, radical decentralization, and peer-to-peer interactions devoid of middlemen. This pivot reflects our realization that the unrestricted freedom characteristic of web3 systems, while exciting, has unfortunately been manipulated in ways that undercut the very creators that these systems set out to empower.
@@ -41,12 +41,30 @@ This requirement for value-add from external marketplaces represents a shift fro
 
 ## Usage Instructions:
 
-This guide provides instructions for integrating the ERC721M into your contract. For a seamless integration, provide the following arguments:
-```
-ERC721M(name, symbol, royaltyFeeBasisPoints, royaltyReceiverAddress, address(this))
+This guide provides instructions for integrating the ERC721M into your contract:
+```solidity
+pragma solidity ^0.8.20;
+
+import "./ERC721M.sol";
+
+contract MyEnforcedRoyaltiesNFT is ERC721M, Ownable {
+
+    uint256 mintPrice = 0.08 ether;
+
+    constructor(string memory name, string memory symbol, string memory _baseURI, address payable royaltyReceiver_) ERC721M(name, symbol, _royaltyFee, royaltyReceiver_, address(this)) {
+        baseURI = _baseURI;
+        _royaltyReceiver = royaltyReceiver_;
+    }
+
+    function mint(address to, uint256 numberOfTokens) public payable {
+        require(msg.value >= (numberOfTokens * mintPrice), "Must send minimum value to mint");
+        royaltyReceiver().transfer(msg.value);
+        _safeMint(to, numberOfTokens, '');
+    }
+}
 ```
 
-You can reference an example of this implementation in the provided ```exampleContract.sol``` file.
+You can reference an example of this implementation in the provided [exampleContract.sol](https://github.com/Mirage-Gallery/ERC721M/blob/main/exampleContract.sol) file.
 
 ### Steps to Sell an NFT using ERC721M:
 
@@ -67,4 +85,4 @@ The ERC721M standard functions as an escrow contract during secondary sales. Imp
 
 To maintain transparency and ensure the security of funds, we recommend configuring your contract to have primary sale mint funds sent directly to the royalty recipient's address. This modification ensures a safer and more trustworthy environment for your community.
 
-You can refer to our ```exampleContract.sol``` for a detailed illustration of how to implement this in your contract. As always, kindly revise the provided instructions to align with your specific contract setup and use case.
+You can refer to our [exampleContract.sol](https://github.com/Mirage-Gallery/ERC721M/blob/main/exampleContract.sol) for a detailed illustration of how to implement this in your contract. As always, kindly revise the provided instructions to align with your specific contract setup and use case.
