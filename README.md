@@ -51,10 +51,7 @@ contract MyEnforcedRoyaltiesNFT is ERC721M, Ownable {
 
     uint256 mintPrice = 0.08 ether;
 
-    constructor(string memory name, string memory symbol, string memory _baseURI, address payable royaltyReceiver_) ERC721M(name, symbol, _royaltyFee, royaltyReceiver_, address(this)) {
-        baseURI = _baseURI;
-        _royaltyReceiver = royaltyReceiver_;
-    }
+    constructor(string memory name, string memory symbol, address payable _royaltyReceiver, uint256 _royaltyFee) ERC721M(name, symbol, _royaltyFee, _royaltyReceiver, address(this)) {}
 
     function mint(address to, uint256 numberOfTokens) public payable {
         require(msg.value >= (numberOfTokens * mintPrice), "Must send minimum value to mint");
