@@ -918,12 +918,13 @@ contract ERC721M is IERC721A {
         uint256 end;
         uint256 duration;
         bool ended;
+        uint256 minimumBid;
     }
 
     uint256 private constant MIN_AUCTION_TIME = 120;
     mapping(uint256 => Auction) public auctions;
 
-    function startAuction(uint256 tokenId, uint256 duration) public {
+    function startAuction(uint256 tokenId, uint256 duration, uint256 minimumBid) public {
         uint256 prevOwnershipPacked = _packedOwnershipOf(tokenId);
 
         // Mask `from` to the lower 160 bits, in case the upper bits somehow aren't clean.
@@ -938,10 +939,10 @@ contract ERC721M is IERC721A {
             if (!isApprovedForAll(from, _msgSenderERC721M())) _revert(TransferCallerNotOwnerNorApproved.selector);
         
         require(duration >= MIN_AUCTION_TIME, "Duration is less than the minimum required");
-        auctions[tokenId] = Auction(address(0), 0, block.timestamp + duration, duration, false);
+        auctions[tokenId] = Auction(address(0), 0, block.timestamp + duration, duration, false, minimumBid);
     }
 
-    function startAuctionOnBid(uint256 tokenId, uint256 duration) public {
+    function startAuctionOnBid(uint256 tokenId, uint256 duration, uint256 minimumBid) public {
         uint256 prevOwnershipPacked = _packedOwnershipOf(tokenId);
 
         // Mask `from` to the lower 160 bits, in case the upper bits somehow aren't clean.
@@ -956,14 +957,16 @@ contract ERC721M is IERC721A {
             if (!isApprovedForAll(from, _msgSenderERC721M())) _revert(TransferCallerNotOwnerNorApproved.selector);
         
         require(duration >= MIN_AUCTION_TIME, "Duration is less than the minimum required");
-        auctions[tokenId] = Auction(address(0), 0, 0, duration, false);
+        auctions[tokenId] = Auction(address(0), 0, 0, duration, false, minimumBid);
     }
 
     function bid(uint256 tokenId) public payable {
         Auction storage auction = auctions[tokenId];
         require(auction.end == 0 || block.timestamp <= auction.end, "Auction already ended or token is not for sale");
-        require(msg.value > auction.highestBid, "There already is a higher bid");
-
+        
+        uint256 minimumRequiredBid = auction.highestBid + (auction.highestBid / 10);
+        require(msg.value >= minimumRequiredBid && msg.value >= auction.minimumBid, "Bid is lower than the highest bid plus 10% or the minimum bid");
+        
         if(auction.end == 0) {
             auction.end = block.timestamp + auction.duration;
         }
