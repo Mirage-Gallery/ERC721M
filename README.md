@@ -67,13 +67,13 @@ You can reference an example of this implementation in the provided [exampleCont
 
 #### Immediate Auction Start:
 ```solidity
-startAuction(uint256 tokenId, uint256 duration)
+startAuction(uint256 tokenId, uint256 duration, uint256 minimumBid)
 ```
 This function will initiate an auction that begins as soon as the transaction is confirmed.
 
 #### Auction Start on First Bid: 
 ```solidity
-startAuctionOnBid(uint256 tokenId, uint256 duration)
+function startAuctionOnBid(uint256 tokenId, uint256 duration, uint256 minimumBid)
 ```
 With this function, the auction will only start once the first bid has been placed.
 
