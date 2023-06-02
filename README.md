@@ -73,7 +73,7 @@ This function will initiate an auction that begins as soon as the transaction is
 
 #### Auction Start on First Bid: 
 ```solidity
-function startAuctionOnBid(uint256 tokenId, uint256 duration, uint256 minimumBid)
+startAuctionOnBid(uint256 tokenId, uint256 duration, uint256 minimumBid)
 ```
 With this function, the auction will only start once the first bid has been placed.
 
