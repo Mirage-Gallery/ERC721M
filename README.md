@@ -23,6 +23,13 @@ To make sales more dynamic and ensure that anyone can be outbid, ERC721M introdu
 
 The "Rapid Auction Mechanism" in ERC721M plays a critical role in preventing bad actors from exploiting the system by deploying their own 'marketplace' contracts to wrap the token transfer and Ether transfers in a single transaction. This mechanism also prevents manipulation attempts where a bad actor could try to coordinate with another party to "sell" the NFT at an artificially low price to minimize the royalty payout. Because the rapid auction system is open to any participant who can outbid the current highest bid, the chances of such collusion successfully avoiding an appropriate royalty fee are significantly diminished.
 
+#### One-time Free Transfer Provision:
+While the ERC721M standard effectively limits direct token transfers to ensure artists' royalties aren't bypassed, it also takes into account the legitimate requirements of users for certain transactions. With the understanding that users may wish to secure their newly-acquired tokens, the standard has an allowance for one free transfer within the first 24 hours after the sale occurs.
+
+This feature is particularly useful for individuals who prefer to mint tokens from their hot wallets—wallets connected to the internet for daily transactions—but want the security of storing their valuable assets in a cold wallet—a wallet that remains disconnected from the internet, providing superior protection from hacking attempts. This one-time free transfer allows them to do just that without any extra cost, maintaining the balance between the security needs of the users and the fair treatment of artists.
+
+However, after this 24 hour window, any subsequent transfers must go through the embedded marketplace functions, thereby ensuring that the artists' royalties are respected. This approach, blending user convenience and artist rights, illustrates the flexibility and adaptability of the ERC721M standard, ushering in a new era in the NFT ecosystem.
+
 ## Philosophy and Impact
 The introduction of ERC721M presents a philosophical pivot in the world of blockchain and decentralized systems. In designing this standard, we acknowledge a departure from the traditionally celebrated ethos of web3: absolute freedom, radical decentralization, and peer-to-peer interactions devoid of middlemen. This pivot reflects our realization that the unrestricted freedom characteristic of web3 systems, while exciting, has unfortunately been manipulated in ways that undercut the very creators that these systems set out to empower.
 
